@@ -1,0 +1,25 @@
+<html>
+<head>
+<script type="text/javascript">
+function setFocus(){
+document.getElementById("LoginUsuario").focus();
+}
+</script>
+</head>
+<body onLoad="setFocus()" bgcolor="#1595">
+<form name="form1" method="post" action="login.php">
+<table width="51%" border="0" align="center" cellpadding="1" cellspacing="0">
+<tr>
+<th colspan="2"><div align="center">Login</div></th></tr>
+<tr><td width="33%" align="right">Login<td width="67%">
+<input type="text" id="LoginUsuario" name="LoginUsuario"/>
+
+<tr><td width="33%" align="right">Senha<td width="67%">
+<input type="password" id="SenhaUsuario" name="SenhaUsuario"/></td></tr>
+<tr><td>&nbsp;</td>
+<td><input type="submit" id="Enviar" name="Enviar" value="Enviar"/></td></tr>
+</form>
+
+
+</body>
+</html>
