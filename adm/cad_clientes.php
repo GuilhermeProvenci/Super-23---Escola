@@ -1,5 +1,6 @@
 <?php
-// include("../conexao.php");
+include("../conexao.php");
+include("funcoes.php");
 // $LoginUsuario = $_POST["LoginUsuario"];
 // $SenhaUsuario = $_POST["SenhaUsuario"];
 // $nome = $_POST["nome"];
