@@ -1,3 +1,0 @@
-valor inicial, condição de parada, incremento
-while abre tr
-for abre td
