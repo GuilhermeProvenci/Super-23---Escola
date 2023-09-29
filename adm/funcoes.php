@@ -1,5 +1,5 @@
 <?php
-function listarRegistros($tabela, $conexaoid) {
+function listarRegistros($tabela, $conexaoid, $opcoes = array()) {
     // Pega a página atual
     $pagina = isset($_GET['pagina']) ? intval($_GET['pagina']) : 1;
 
@@ -31,8 +31,11 @@ function listarRegistros($tabela, $conexaoid) {
         $colunas[] = $coluna_nome;
         print("<th>$coluna_nome</th>");
     }
+
+    foreach ($opcoes as $opcao) {
+        print("<th>$opcao</th>");
+    }
     
-    print("<th>Ações</th>");
     print("</tr>");
 
     while ($registros = mysqli_fetch_array($resultado)) {
@@ -41,8 +44,13 @@ function listarRegistros($tabela, $conexaoid) {
             print("<td>{$registros[$coluna]}</td>");
         }
         
-        $idCampo = $colunas[0]; //na teoria o priemrio cmapo é o id
-        print("<td><a href=validar_{$tabela}.php?$idCampo={$registros[$idCampo]}>Validar</a> | <a href=edt_{$tabela}.php?$idCampo={$registros[$idCampo]}>Editar</a> | <a href=del_{$tabela}.php?$idCampo={$registros[$idCampo]}>Excluir</a></td>");
+        $idCampo = $colunas[0]; // na teoria o primeiro campo é o id
+        
+        foreach ($opcoes as $opcao) {
+            $opcaoLink = strtolower($opcao);
+            print("<td><a href={$opcaoLink}_{$tabela}.php?$idCampo={$registros[$idCampo]}>$opcao</a></td>");
+        }
+        
         print("</tr>");
     }
     print("</table></center>");
@@ -67,4 +75,102 @@ function listarRegistros($tabela, $conexaoid) {
 
     #endregion
 }
-?>
+
+// function criarFormularioCadastro($tabela, $conexaoid, $camposDesejados = array(), $readonlyCampos = array()) {
+//     // Obtenha os nomes das colunas da tabela
+//     $query = "SHOW COLUMNS FROM $tabela";
+//     $resultado = mysqli_query($conexaoid, $query);
+
+//     if ($resultado) {
+//         echo "<form method='post' action='cad_$tabela.php'>";
+//         while ($row = mysqli_fetch_assoc($resultado)) {
+//             $nomeColuna = $row['Field'];
+            
+//             // Verifique se o campo deve ser incluído ou excluído
+//             if (!empty($camposDesejados) && !in_array($nomeColuna, $camposDesejados)) {
+//                 continue;
+//             }
+            
+//             // Verifique se o campo deve ser apenas leitura (readonly)
+//             $readonly = in_array($nomeColuna, $readonlyCampos) ? "readonly" : "";
+
+//             echo "<label for='$nomeColuna'>$nomeColuna:</label>";
+//             echo "<input type='text' name='$nomeColuna' id='$nomeColuna' $readonly required><br>";
+//         }
+//         echo "<input type='submit' name='Salvar' value='Salvar'>";
+//         echo "</form>";
+//     } else {
+//         echo "<p>Erro ao criar o formulário de cadastro: " . mysqli_error($conexaoid) . "</p>";
+//     }
+// }
+
+function criarFormularioCadastro($tabela, $conexaoid, $camposDesejados = array(), $readonlyCampos = array()) {
+    // Obtenha os nomes das colunas da tabela
+    $query = "SHOW COLUMNS FROM $tabela";
+    $resultado = mysqli_query($conexaoid, $query);
+
+    if ($resultado) {
+        if ($_SERVER["REQUEST_METHOD"] == "POST") {
+            // Se o formulário foi submetido, execute a inserção de dados
+            $inserirQuery = "INSERT INTO $tabela (";
+            $valores = array();
+            
+            while ($row = mysqli_fetch_assoc($resultado)) {
+                $nomeColuna = $row['Field'];
+
+                // Verifique se o campo deve ser incluído ou excluído
+                if (!empty($camposDesejados) && !in_array($nomeColuna, $camposDesejados)) {
+                    continue;
+                }
+
+                // Verifique se o campo deve ser apenas leitura (readonly)
+                $readonly = in_array($nomeColuna, $readonlyCampos) ? "readonly" : "";
+
+                echo "<label for='$nomeColuna'>$nomeColuna:</label>";
+                echo "<input type='text' name='$nomeColuna' id='$nomeColuna' $readonly required><br>";
+
+                // Construa a lista de colunas e valores para a inserção
+                $inserirQuery .= "$nomeColuna, ";
+                $valores[] = "'" . mysqli_real_escape_string($conexaoid, $_POST[$nomeColuna]) . "'";
+            }
+
+            // Remova a vírgula extra no final da lista de colunas
+            $inserirQuery = rtrim($inserirQuery, ", ") . ") VALUES (" . implode(", ", $valores) . ")";
+
+            // Execute a consulta de inserção
+            $resultadoInserir = mysqli_query($conexaoid, $inserirQuery);
+
+            if ($resultadoInserir) {
+                echo "<p>Dados inseridos com sucesso.</p>";
+            } else {
+                echo "<p>Erro ao inserir os dados: " . mysqli_error($conexaoid) . "</p>";
+            }
+        } else {
+            // Se o formulário não foi submetido, exiba o formulário
+            echo "<form method='post' action=''>";
+            
+            while ($row = mysqli_fetch_assoc($resultado)) {
+                $nomeColuna = $row['Field'];
+
+                // Verifique se o campo deve ser incluído ou excluído
+                if (!empty($camposDesejados) && !in_array($nomeColuna, $camposDesejados)) {
+                    continue;
+                }
+
+                // Verifique se o campo deve ser apenas leitura (readonly)
+                $readonly = in_array($nomeColuna, $readonlyCampos) ? "readonly" : "";
+
+                echo "<label for='$nomeColuna'>$nomeColuna:</label>";
+                echo "<input type='text' name='$nomeColuna' id='$nomeColuna' $readonly required><br>";
+            }
+
+            echo "<input type='submit' name='Salvar' value='Salvar'>";
+            echo "</form>";
+        }
+    } else {
+        echo "<p>Erro ao criar o formulário de cadastro: " . mysqli_error($conexaoid) . "</p>";
+    }
+}
+
+
+

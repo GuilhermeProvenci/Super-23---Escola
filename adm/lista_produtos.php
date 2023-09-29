@@ -1,5 +1,6 @@
 <?php
 include("../conexao.php");
 include("funcoes.php");
-listarRegistros("produtos", $conexaoid);
+$opcoesPersonalizadas = array("Editar", "Excluir");
+listarRegistros("produtos", $conexaoid, $opcoesPersonalizadas);
 ?>

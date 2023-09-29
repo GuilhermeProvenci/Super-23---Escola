@@ -1,5 +1,6 @@
 <?php
 include("../conexao.php");
 include("funcoes.php");
-listarRegistros("categorias", $conexaoid);
+$opcoesPersonalizadas = array("Excluir");
+listarRegistros("categorias", $conexaoid, $opcoesPersonalizadas);
 ?>
