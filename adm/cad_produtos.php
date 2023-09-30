@@ -7,6 +7,7 @@
     <h1>Cadastro de Produtos</h1>
 
     <?php
+    include("funcoes.php");
     // Verifica se o formulário foi enviado
     if ($_SERVER["REQUEST_METHOD"] == "POST") {
         include("../conexao.php");
@@ -33,6 +34,12 @@
             echo "<p>Todos os campos são obrigatórios.</p>";
         }
     }
+
+    $nomeTabela = "produtos";
+    $camposDesejados = array();
+    $camposReadonly = array("CodProdutos");
+    criarFormularioCadastro($nomeTabela, $conexaoid, $camposDesejados, $camposReadonly);
+
     ?>
 
     <form method="post" action="cad_produtos.php">
