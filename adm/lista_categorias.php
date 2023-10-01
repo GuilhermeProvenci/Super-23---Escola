@@ -6,6 +6,7 @@
     <title>Lista de Categorias</title>
     <link rel="stylesheet" type="text/css" href="../css_avulsos/lista-registros.css" />
     
+    
 </head>
 <body>
     <header>

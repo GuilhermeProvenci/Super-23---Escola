@@ -86,8 +86,7 @@ function criarFormularioCadastro($tabela, $conexaoid, $camposDesejados = array()
     if ($resultado) {
         if ($_SERVER["REQUEST_METHOD"] == "POST") {
             // Se o formulário foi submetido, execute a inserção de dados
-            $inserirQuery = "INSERT INTO $tabela (";
-            $valores = array();
+            echo "<div class='form-container'><form method='post' action=''>";
 
             while ($row = mysqli_fetch_assoc($resultado)) {
                 $nomeColuna = $row['Field'];
@@ -111,11 +110,15 @@ function criarFormularioCadastro($tabela, $conexaoid, $camposDesejados = array()
                 // Se o nome da coluna for a coluna do ID, preencha com o valor obtido
                 if ($nomeColuna === $nomeColunaId) {
                     $proximoCodigo = obterProximoCodigoDisponivel($tabela, $conexaoid);
+                    echo "<div class='form-group'>";
                     echo "<label for='$nomeColuna'>$nomeColuna:</label>";
-                    echo "<input type='text' name='$nomeColuna' id='$nomeColuna' value='$proximoCodigo' $readonly required><br>";
+                    echo "<input type='text' name='$nomeColuna' id='$nomeColuna' value='$proximoCodigo' $readonly required>";
+                    echo "</div>";
                 } else {
+                    echo "<div class='form-group'>";
                     echo "<label for='$nomeColuna'>$nomeColuna:</label>";
-                    echo "<input type='text' name='$nomeColuna' id='$nomeColuna' $readonly required><br>";
+                    echo "<input type='text' name='$nomeColuna' id='$nomeColuna' $readonly required>";
+                    echo "</div>";
                 }
 
                 // Construa a lista de colunas e valores para a inserção
@@ -140,10 +143,12 @@ function criarFormularioCadastro($tabela, $conexaoid, $camposDesejados = array()
             } else {
                 echo "<p>Erro ao inserir os dados: " . mysqli_error($conexaoid) . "</p>";
             }
+
+            echo "</form></div>";
             
         } else {
             // Se o formulário não foi submetido, exiba o formulário
-            echo "<form method='post' action=''>";
+            echo "<div class='form-container'><form method='post' action=''>";
 
             while ($row = mysqli_fetch_assoc($resultado)) {
                 $nomeColuna = $row['Field'];
@@ -167,21 +172,27 @@ function criarFormularioCadastro($tabela, $conexaoid, $camposDesejados = array()
                 // Se o nome da coluna for a coluna do ID, preencha com o valor obtido
                 if ($nomeColuna === $nomeColunaId) {
                     $proximoCodigo = obterProximoCodigoDisponivel($tabela, $conexaoid);
+                    echo "<div class='form-group'>";
                     echo "<label for='$nomeColuna'>$nomeColuna:</label>";
-                    echo "<input type='text' name='$nomeColuna' id='$nomeColuna' value='$proximoCodigo' $readonly required><br>";
+                    echo "<input type='text' name='$nomeColuna' id='$nomeColuna' value='$proximoCodigo' $readonly required>";
+                    echo "</div>";
                 } else {
+                    echo "<div class='form-group'>";
                     echo "<label for='$nomeColuna'>$nomeColuna:</label>";
-                    echo "<input type='text' name='$nomeColuna' id='$nomeColuna' $readonly required><br>";
+                    echo "<input type='text' name='$nomeColuna' id='$nomeColuna' $readonly required>";
+                    echo "</div>";
                 }
             }
 
-            echo "<input type='submit' name='Salvar' value='Salvar'>";
-            echo "</form>";
+            echo "<input type='submit' name='Salvar' value='Salvar' class='btn-submit'>";
+
+            echo "</form></div>";
         }
     } else {
         echo "<p>Erro ao criar o formulário de cadastro: " . mysqli_error($conexaoid) . "</p>";
     }
 }
+
 
 
 function obterProximoCodigoDisponivel($tabela, $conexaoid) {
