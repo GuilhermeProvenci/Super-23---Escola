@@ -76,35 +76,7 @@ function listarRegistros($tabela, $conexaoid, $opcoes = array()) {
     #endregion
 }
 
-// function criarFormularioCadastro($tabela, $conexaoid, $camposDesejados = array(), $readonlyCampos = array()) {
-//     // Obtenha os nomes das colunas da tabela
-//     $query = "SHOW COLUMNS FROM $tabela";
-//     $resultado = mysqli_query($conexaoid, $query);
-
-//     if ($resultado) {
-//         echo "<form method='post' action='cad_$tabela.php'>";
-//         while ($row = mysqli_fetch_assoc($resultado)) {
-//             $nomeColuna = $row['Field'];
-            
-//             // Verifique se o campo deve ser incluído ou excluído
-//             if (!empty($camposDesejados) && !in_array($nomeColuna, $camposDesejados)) {
-//                 continue;
-//             }
-            
-//             // Verifique se o campo deve ser apenas leitura (readonly)
-//             $readonly = in_array($nomeColuna, $readonlyCampos) ? "readonly" : "";
-
-//             echo "<label for='$nomeColuna'>$nomeColuna:</label>";
-//             echo "<input type='text' name='$nomeColuna' id='$nomeColuna' $readonly required><br>";
-//         }
-//         echo "<input type='submit' name='Salvar' value='Salvar'>";
-//         echo "</form>";
-//     } else {
-//         echo "<p>Erro ao criar o formulário de cadastro: " . mysqli_error($conexaoid) . "</p>";
-//     }
-// }
-
-function criarFormularioCadastro($tabela, $conexaoid, $camposDesejados = array(), $readonlyCampos = array()) {
+function criarFormularioCadastro($tabela, $conexaoid, $camposDesejados = array(), $camposNaoDesejados = array(), $readonlyCampos = array()) {
     // Obtenha os nomes das colunas da tabela
     $query = "SHOW COLUMNS FROM $tabela";
     $resultado = mysqli_query($conexaoid, $query);
@@ -114,7 +86,7 @@ function criarFormularioCadastro($tabela, $conexaoid, $camposDesejados = array()
             // Se o formulário foi submetido, execute a inserção de dados
             $inserirQuery = "INSERT INTO $tabela (";
             $valores = array();
-            
+
             while ($row = mysqli_fetch_assoc($resultado)) {
                 $nomeColuna = $row['Field'];
 
@@ -123,11 +95,26 @@ function criarFormularioCadastro($tabela, $conexaoid, $camposDesejados = array()
                     continue;
                 }
 
+                // Verifique se o campo deve ser excluído
+                if (in_array($nomeColuna, $camposNaoDesejados)) {
+                    continue;
+                }
+
                 // Verifique se o campo deve ser apenas leitura (readonly)
                 $readonly = in_array($nomeColuna, $readonlyCampos) ? "readonly" : "";
 
-                echo "<label for='$nomeColuna'>$nomeColuna:</label>";
-                echo "<input type='text' name='$nomeColuna' id='$nomeColuna' $readonly required><br>";
+                // Obtenha o nome da coluna do ID singular com base no nome da tabela plural
+                $nomeColunaId = "Cod" . ucfirst(substr($tabela, 0, -1));
+
+                // Se o nome da coluna for a coluna do ID, preencha com o valor obtido
+                if ($nomeColuna === $nomeColunaId) {
+                    $proximoCodigo = obterProximoCodigoDisponivel($tabela, $conexaoid);
+                    echo "<label for='$nomeColuna'>$nomeColuna:</label>";
+                    echo "<input type='text' name='$nomeColuna' id='$nomeColuna' value='$proximoCodigo' $readonly required><br>";
+                } else {
+                    echo "<label for='$nomeColuna'>$nomeColuna:</label>";
+                    echo "<input type='text' name='$nomeColuna' id='$nomeColuna' $readonly required><br>";
+                }
 
                 // Construa a lista de colunas e valores para a inserção
                 $inserirQuery .= "$nomeColuna, ";
@@ -141,14 +128,21 @@ function criarFormularioCadastro($tabela, $conexaoid, $camposDesejados = array()
             $resultadoInserir = mysqli_query($conexaoid, $inserirQuery);
 
             if ($resultadoInserir) {
-                echo "<p>Dados inseridos com sucesso.</p>";
+                // Obtenha o nome do arquivo PHP atual
+                $nomeArquivo = basename($_SERVER['PHP_SELF']);
+                
+                // Redirecione para a mesma página com o novo código
+                $proximoCodigo = obterProximoCodigoDisponivel($tabela, $conexaoid);
+                echo "<script>window.location.href='$nomeArquivo?codigo=$proximoCodigo';</script>";
+                exit();
             } else {
                 echo "<p>Erro ao inserir os dados: " . mysqli_error($conexaoid) . "</p>";
             }
+            
         } else {
             // Se o formulário não foi submetido, exiba o formulário
             echo "<form method='post' action=''>";
-            
+
             while ($row = mysqli_fetch_assoc($resultado)) {
                 $nomeColuna = $row['Field'];
 
@@ -157,11 +151,26 @@ function criarFormularioCadastro($tabela, $conexaoid, $camposDesejados = array()
                     continue;
                 }
 
+                // Verifique se o campo deve ser excluído
+                if (in_array($nomeColuna, $camposNaoDesejados)) {
+                    continue;
+                }
+
                 // Verifique se o campo deve ser apenas leitura (readonly)
                 $readonly = in_array($nomeColuna, $readonlyCampos) ? "readonly" : "";
 
-                echo "<label for='$nomeColuna'>$nomeColuna:</label>";
-                echo "<input type='text' name='$nomeColuna' id='$nomeColuna' $readonly required><br>";
+                // Obtenha o nome da coluna do ID singular com base no nome da tabela plural
+                $nomeColunaId = "Cod" . ucfirst(substr($tabela, 0, -1));
+
+                // Se o nome da coluna for a coluna do ID, preencha com o valor obtido
+                if ($nomeColuna === $nomeColunaId) {
+                    $proximoCodigo = obterProximoCodigoDisponivel($tabela, $conexaoid);
+                    echo "<label for='$nomeColuna'>$nomeColuna:</label>";
+                    echo "<input type='text' name='$nomeColuna' id='$nomeColuna' value='$proximoCodigo' $readonly required><br>";
+                } else {
+                    echo "<label for='$nomeColuna'>$nomeColuna:</label>";
+                    echo "<input type='text' name='$nomeColuna' id='$nomeColuna' $readonly required><br>";
+                }
             }
 
             echo "<input type='submit' name='Salvar' value='Salvar'>";
@@ -171,6 +180,22 @@ function criarFormularioCadastro($tabela, $conexaoid, $camposDesejados = array()
         echo "<p>Erro ao criar o formulário de cadastro: " . mysqli_error($conexaoid) . "</p>";
     }
 }
+
+
+function obterProximoCodigoDisponivel($tabela, $conexaoid) {
+    $query = "SELECT AUTO_INCREMENT
+              FROM information_schema.TABLES
+              WHERE TABLE_SCHEMA = DATABASE()
+              AND TABLE_NAME = '$tabela'";
+    $resultado = mysqli_query($conexaoid, $query);
+
+    if ($resultado && $row = mysqli_fetch_assoc($resultado)) {
+        return $row['AUTO_INCREMENT'];
+    }
+
+    return 1; // Valor padrão se a consulta falhar
+}
+
 
 
 
