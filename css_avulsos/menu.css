@@ -1,0 +1,105 @@
+body {
+  font-family: Arial, sans-serif;
+  margin: 0;
+  padding: 0;
+  background-color: #f0f0f0;
+}
+
+.container {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 20px;
+  background-color: #fff;
+  border-radius: 5px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+}
+
+h3 {
+  text-align: center;
+  margin-bottom: 20px;
+  color: rgba(0, 0, 0, 0.856);
+}
+
+.menu-table {
+  width: 100%;
+  margin-top: 20px;
+  border-collapse: collapse;
+}
+
+.menu-table th, .menu-table td {
+  padding: 15px;
+  text-align: left;
+  border-bottom: 1px solid #ddd;
+}
+
+.menu-table th {
+  background-color: rgba(17, 26, 153, 0.514);
+  color: #fff;
+  font-weight: bold;
+}
+
+.menu-table a {
+  text-decoration: none;
+  color: rgba(0, 0, 0, 0.795);
+  font-weight: bold;
+}
+
+.menu-table a:hover {
+  text-decoration: underline;
+  color: #065574;
+}
+
+.menu-link {
+  display: inline-block;
+  background-color: #1c0fd4;
+  color: #fff;
+  padding: 5px 10px;
+  border-radius: 5px;
+  text-decoration: none;
+  margin-right: 10px;
+  transition: background-color 0.3s ease;
+}
+
+.menu-link:hover {
+  background-color: rgba(17, 153, 142, 0.333);
+}
+
+/* Novos estilos para o tema do supermercado */
+body {
+  background-image: url('supermarket-bg.jpg'); /* Adicione a imagem de fundo desejada */
+  background-size: cover;
+  background-repeat: no-repeat;
+}
+
+.container {
+  background-color: rgba(255, 255, 255, 0.9); /* Fundo semi-transparente */
+  padding: 30px;
+}
+
+.menu-table {
+  background-color: #fff;
+  border-radius: 10px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+}
+
+.menu-table th, .menu-table td {
+  padding: 15px;
+  text-align: left;
+  border-bottom: 1px solid #ddd;
+  font-weight: bold;
+}
+
+.menu-link {
+  background-color: #f0b10e; /* Amarelo */
+  color: #fff;
+  margin-right: 10px;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 5px;
+  text-decoration: none;
+  transition: background-color 0.3s ease;
+}
+
+.menu-link:hover {
+  background-color: #e8a008; /* Amarelo mais escuro no hover */
+}
