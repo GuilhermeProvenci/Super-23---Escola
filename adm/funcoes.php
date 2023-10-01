@@ -19,12 +19,13 @@ function listarRegistros($tabela, $conexaoid, $opcoes = array()) {
     $query = "SELECT * FROM $tabela LIMIT $inicio, $lpp";
     $resultado = mysqli_query($conexaoid, $query);
 
+    // Imprima a abertura da tabela com a classe "lista-registros"
     print("<h1>LISTA DE " . strtoupper($tabela) . "</h1>");
     print("<BR><font color=red><B>$tabela</b></font><BR>");
-    print("<center><br><table border=1>");
+    print("<center><br><table class='lista-registros' border=1>");
     print("<tr>");
 
-    //pega os nomes das colunas da tabela e criando cabeçalhos da table html
+    // Pega os nomes das colunas da tabela e cria cabeçalhos da tabela HTML
     $colunas = [];
     while ($info_coluna = mysqli_fetch_field($resultado)) {
         $coluna_nome = $info_coluna->name;
@@ -35,7 +36,7 @@ function listarRegistros($tabela, $conexaoid, $opcoes = array()) {
     foreach ($opcoes as $opcao) {
         print("<th>$opcao</th>");
     }
-    
+
     print("</tr>");
 
     while ($registros = mysqli_fetch_array($resultado)) {
@@ -43,14 +44,14 @@ function listarRegistros($tabela, $conexaoid, $opcoes = array()) {
         foreach ($colunas as $coluna) {
             print("<td>{$registros[$coluna]}</td>");
         }
-        
-        $idCampo = $colunas[0]; // na teoria o primeiro campo é o id
-        
+
+        $idCampo = $colunas[0]; // Na teoria, o primeiro campo é o ID
+
         foreach ($opcoes as $opcao) {
             $opcaoLink = strtolower($opcao);
             print("<td><a href={$opcaoLink}_{$tabela}.php?$idCampo={$registros[$idCampo]}>$opcao</a></td>");
         }
-        
+
         print("</tr>");
     }
     print("</table></center>");
@@ -75,6 +76,7 @@ function listarRegistros($tabela, $conexaoid, $opcoes = array()) {
 
     #endregion
 }
+
 
 function criarFormularioCadastro($tabela, $conexaoid, $camposDesejados = array(), $camposNaoDesejados = array(), $readonlyCampos = array()) {
     // Obtenha os nomes das colunas da tabela
