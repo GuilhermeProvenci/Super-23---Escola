@@ -85,8 +85,11 @@ function criarFormularioCadastro($tabela, $conexaoid, $camposDesejados = array()
 
     if ($resultado) {
         if ($_SERVER["REQUEST_METHOD"] == "POST") {
-            // Se o formulário foi submetido, execute a inserção de dados
             echo "<div class='form-container'><form method='post' action=''>";
+
+            // Inicialize a variável $inserirQuery
+            $inserirQuery = "INSERT INTO $tabela (";
+            $valores = array();
 
             while ($row = mysqli_fetch_assoc($resultado)) {
                 $nomeColuna = $row['Field'];
@@ -115,9 +118,12 @@ function criarFormularioCadastro($tabela, $conexaoid, $camposDesejados = array()
                     echo "<input type='text' name='$nomeColuna' id='$nomeColuna' value='$proximoCodigo' $readonly required>";
                     echo "</div>";
                 } else {
+                    // Obtenha o tamanho máximo da coluna a partir do banco de dados
+                    $tamanhoMaximo = obterTamanhoMaximoColuna($tabela, $nomeColuna, $conexaoid);
+
                     echo "<div class='form-group'>";
                     echo "<label for='$nomeColuna'>$nomeColuna:</label>";
-                    echo "<input type='text' name='$nomeColuna' id='$nomeColuna' $readonly required>";
+                    echo "<input type='text' name='$nomeColuna' id='$nomeColuna' $readonly required maxlength='$tamanhoMaximo'>";
                     echo "</div>";
                 }
 
@@ -128,6 +134,9 @@ function criarFormularioCadastro($tabela, $conexaoid, $camposDesejados = array()
 
             // Remova a vírgula extra no final da lista de colunas
             $inserirQuery = rtrim($inserirQuery, ", ") . ") VALUES (" . implode(", ", $valores) . ")";
+            
+            // Depurar a consulta SQL gerada
+            // echo "Consulta SQL: $inserirQuery";
 
             // Execute a consulta de inserção
             $resultadoInserir = mysqli_query($conexaoid, $inserirQuery);
@@ -177,9 +186,12 @@ function criarFormularioCadastro($tabela, $conexaoid, $camposDesejados = array()
                     echo "<input type='text' name='$nomeColuna' id='$nomeColuna' value='$proximoCodigo' $readonly required>";
                     echo "</div>";
                 } else {
+                    // Obtenha o tamanho máximo da coluna a partir do banco de dados
+                    $tamanhoMaximo = obterTamanhoMaximoColuna($tabela, $nomeColuna, $conexaoid);
+
                     echo "<div class='form-group'>";
                     echo "<label for='$nomeColuna'>$nomeColuna:</label>";
-                    echo "<input type='text' name='$nomeColuna' id='$nomeColuna' $readonly required>";
+                    echo "<input type='text' name='$nomeColuna' id='$nomeColuna' $readonly required maxlength='$tamanhoMaximo'>";
                     echo "</div>";
                 }
             }
@@ -193,6 +205,20 @@ function criarFormularioCadastro($tabela, $conexaoid, $camposDesejados = array()
     }
 }
 
+function obterTamanhoMaximoColuna($tabela, $coluna, $conexaoid) {
+    $query = "SELECT CHARACTER_MAXIMUM_LENGTH
+              FROM information_schema.COLUMNS
+              WHERE TABLE_SCHEMA = DATABASE()
+              AND TABLE_NAME = '$tabela'
+              AND COLUMN_NAME = '$coluna'";
+    $resultado = mysqli_query($conexaoid, $query);
+
+    if ($resultado && $row = mysqli_fetch_assoc($resultado)) {
+        return $row['CHARACTER_MAXIMUM_LENGTH'];
+    }
+
+    return 255; // Valor padrão se a consulta falhar
+}
 
 
 function obterProximoCodigoDisponivel($tabela, $conexaoid) {
