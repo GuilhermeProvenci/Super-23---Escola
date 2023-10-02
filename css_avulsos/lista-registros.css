@@ -28,3 +28,18 @@
   text-decoration: underline;
   color: #1e4ba3;
 }
+
+.menu-link {
+  background-color: #f0b10e; 
+  color: #fff;
+  margin-right: 10px;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 5px;
+  text-decoration: none;
+  transition: background-color 0.3s ease;
+}
+
+.menu-link:hover {
+  background-color: #e8a008; 
+}

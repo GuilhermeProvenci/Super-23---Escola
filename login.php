@@ -1,5 +1,5 @@
 <?php
-include("conexao.php");
+include("./conexao.php");
 
 if ($_POST) {
     $LoginUsuario = mysqli_real_escape_string($conexaoid, $_POST['LoginUsuario']); // Evite SQL Injection
@@ -19,10 +19,14 @@ if ($_POST) {
                 // Senha válida, o usuário está autenticado
                 if ($registro["Login"] == "adm") {
                     echo ("<script type='text/javascript'>");
-                    print("window.open('adm/opcoes.html')");
+                    echo ("window.location.href = 'adm/opcoes.html';"); // Redireciona para a nova página
+                    echo ("window.close();"); // Fecha a página de login
                     echo("</script>");
                 } else {
-                    print("<BR><a href='ver_produto.php?CodCliente={$registro['CodCliente']}'> Produtos</a>");
+                    echo ("<script type='text/javascript'>");
+                    echo ("window.location.href = 'cliente/produtos/lista_produtos.php?CodCliente={$registro['CodCliente']}';"); // Redireciona para a nova página
+                    echo ("window.close();"); // Fecha a página de login
+                    echo("</script>");
                 }
             } else {
                 // Senha incorreta

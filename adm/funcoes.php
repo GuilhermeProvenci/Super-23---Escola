@@ -72,7 +72,7 @@ function listarRegistros($tabela, $conexaoid, $opcoes = array()) {
         print(" | <a href='$link_proxima'>Próxima</a>");
     }
 
-    print(" | <a href='opcoes.html'>Voltar</a>");
+    //print(" | <a href='opcoes.html'>Voltar</a>");
 
     #endregion
 }

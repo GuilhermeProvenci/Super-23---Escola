@@ -1,7 +1,6 @@
 <?php
 $host = "localhost";
 $usuario = "root";
-$senha = "masterkey";
 $banco = "escola";
 
 // Conectar usando MySQLi
