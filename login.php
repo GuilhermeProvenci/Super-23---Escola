@@ -1,9 +1,3 @@
-<html>
-<head>
-    <title>Listas</title>
-</head>
-<body background="#CCC">
-<font size=5>
 <?php
 include("conexao.php");
 
@@ -15,27 +9,31 @@ if ($_POST) {
         print("É necessário digitar login e senha <BR>");
     } else {
         $query = "SELECT * FROM clientes WHERE ";
-        $query .= " login='$LoginUsuario' AND ";
-        $query .= " senha='$SenhaUsuario' ";
+        $query .= " login='$LoginUsuario' ";
 
         $resultado = mysqli_query($conexaoid, $query); // Use mysqli_query em vez de mysql_query
         $registro = mysqli_fetch_array($resultado);
 
-        if ($registro['Login'] == $LoginUsuario and
-            $registro['Senha'] == $SenhaUsuario) {
-            if ($registro["Login"] == "admin" and $registro["Senha"] == "admin") {
-                echo ("<script type='text/javascript'>");
-                print("window.open('adm/opcoes.html')");
-                echo("</script>");
+        if ($registro) {
+            if (password_verify($SenhaUsuario, $registro['Senha'])) {
+                // Senha válida, o usuário está autenticado
+                if ($registro["Login"] == "adm") {
+                    echo ("<script type='text/javascript'>");
+                    print("window.open('adm/opcoes.html')");
+                    echo("</script>");
+                } else {
+                    print("<BR><a href='ver_produto.php?CodCliente={$registro['CodCliente']}'> Produtos</a>");
+                }
             } else {
-                print("<BR><a href='ver_produto.php?CodCliente={$registro['CodCliente']}'> Produtos</a>"); // Use {} para incorporar valores em strings
+                // Senha incorreta
+                echo "<script>window.alert('Senha incorreta para o login: $LoginUsuario. A senha correta é {$registro['Senha']}')</script>";
+                require_once("login.html");
             }
         } else {
-            echo "<script>window.alert('Senha ou login incorreto')</script>";
+            // Usuário não encontrado
+            echo "<script>window.alert('Login não encontrado: $LoginUsuario')</script>";
             require_once("login.html");
         }
     }
 }
 ?>
-</body>
-</html>
