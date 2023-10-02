@@ -66,10 +66,14 @@ h3 {
 
 /* Novos estilos para o tema do supermercado */
 body {
-  background-image: url('supermarket-bg.jpg'); /* Adicione a imagem de fundo desejada */
-  background-size: cover;
+  background-image: url('../imagens/super3.jpeg');
+  background-size: 80%; /* Reduz o tamanho da imagem para 80% */
   background-repeat: no-repeat;
+  background-position: center center; /* Centraliza a imagem */
 }
+
+
+
 
 .container {
   background-color: rgba(255, 255, 255, 0.9); /* Fundo semi-transparente */
