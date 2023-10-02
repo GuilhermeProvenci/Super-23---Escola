@@ -87,8 +87,8 @@ function criarFormularioCadastro($tabela, $conexaoid, $camposDesejados = array()
         if ($_SERVER["REQUEST_METHOD"] == "POST") {
             echo "<div class='form-container'><form method='post' action=''>";
 
-            // Inicialize a variável $inserirQuery
-            $inserirQuery = "INSERT INTO $tabela (";
+            // Inicialize a variável $colunas e $valores
+            $colunas = array();
             $valores = array();
 
             while ($row = mysqli_fetch_assoc($resultado)) {
@@ -107,34 +107,26 @@ function criarFormularioCadastro($tabela, $conexaoid, $camposDesejados = array()
                 // Verifique se o campo deve ser apenas leitura (readonly)
                 $readonly = in_array($nomeColuna, $readonlyCampos) ? "readonly" : "";
 
-                // Obtenha o nome da coluna do ID singular com base no nome da tabela plural
-                $nomeColunaId = "Cod" . ucfirst(substr($tabela, 0, -1));
-
-                // Se o nome da coluna for a coluna do ID, preencha com o valor obtido
-                if ($nomeColuna === $nomeColunaId) {
-                    $proximoCodigo = obterProximoCodigoDisponivel($tabela, $conexaoid);
-                    echo "<div class='form-group'>";
-                    echo "<label for='$nomeColuna'>$nomeColuna:</label>";
-                    echo "<input type='text' name='$nomeColuna' id='$nomeColuna' value='$proximoCodigo' $readonly required>";
-                    echo "</div>";
+                // Se o nome da coluna for a coluna de senha, faça o hashing da senha
+                if ($nomeColuna === 'Senha') {
+                    $senha = $_POST[$nomeColuna];
+                    $hashSenha = password_hash($senha, PASSWORD_DEFAULT);
+                    $colunas[] = $nomeColuna;
+                    $valores[] = "'" . mysqli_real_escape_string($conexaoid, $hashSenha) . "'";
                 } else {
-                    // Obtenha o tamanho máximo da coluna a partir do banco de dados
-                    $tamanhoMaximo = obterTamanhoMaximoColuna($tabela, $nomeColuna, $conexaoid);
-
-                    echo "<div class='form-group'>";
-                    echo "<label for='$nomeColuna'>$nomeColuna:</label>";
-                    echo "<input type='text' name='$nomeColuna' id='$nomeColuna' $readonly required maxlength='$tamanhoMaximo'>";
-                    echo "</div>";
+                    $colunas[] = $nomeColuna;
+                    $valores[] = "'" . mysqli_real_escape_string($conexaoid, $_POST[$nomeColuna]) . "'";
                 }
-
-                // Construa a lista de colunas e valores para a inserção
-                $inserirQuery .= "$nomeColuna, ";
-                $valores[] = "'" . mysqli_real_escape_string($conexaoid, $_POST[$nomeColuna]) . "'";
             }
 
-            // Remova a vírgula extra no final da lista de colunas
-            $inserirQuery = rtrim($inserirQuery, ", ") . ") VALUES (" . implode(", ", $valores) . ")";
-            
+            // Construa a lista de colunas para o comando SQL
+            $colunasQuery = implode(", ", $colunas);
+            // Construa a lista de valores para o comando SQL
+            $valoresQuery = implode(", ", $valores);
+
+            // Construa a consulta SQL completa
+            $inserirQuery = "INSERT INTO $tabela ($colunasQuery) VALUES ($valoresQuery)";
+
             // Depurar a consulta SQL gerada
             // echo "Consulta SQL: $inserirQuery";
 
@@ -204,6 +196,7 @@ function criarFormularioCadastro($tabela, $conexaoid, $camposDesejados = array()
         echo "<p>Erro ao criar o formulário de cadastro: " . mysqli_error($conexaoid) . "</p>";
     }
 }
+
 
 function obterTamanhoMaximoColuna($tabela, $coluna, $conexaoid) {
     $query = "SELECT CHARACTER_MAXIMUM_LENGTH

@@ -40,7 +40,7 @@ if(isset($_GET['CodCliente'])){
 <tr>
 <td width="50%" align="right"> &nbsp; </td>
 <td width="50%"><input name="Excluir" type="submit" id="excluir" value="Excluir">
-<input type="button" value="Voltar" OnClick="window.location='lista_cliente.php'">
+<input type="button" value="Voltar" OnClick="window.location='lista_clientes.php'">
 </td>
 </tr>
 </table>

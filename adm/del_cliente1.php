@@ -11,5 +11,5 @@ if ($_POST['Excluir']) {
         print("cliente $Nome excluído<BR>");
     }
 }
-print("<a href='./lista_cliente.php'>Opções de adm</a>");
+print("<a href='./lista_clientes.php'>Opções de adm</a>");
 ?>
