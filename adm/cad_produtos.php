@@ -2,6 +2,7 @@
 <html>
 <head>
     <title>Cadastro de Produtos</title>
+    <link rel="stylesheet" type="text/css" href="../css_avulsos/cadastros.css" />
 </head>
 <body>
     <h1>Cadastro de Produtos</h1>
