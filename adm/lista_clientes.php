@@ -17,6 +17,8 @@
         include("funcoes.php");
         $opcoesPersonalizadas = array("Validar", "Editar", "Excluir");
         listarRegistros("clientes", $conexaoid, $opcoesPersonalizadas);
+        imprimirTabelaComoPDF("clientes", $conexaoid, $opcoesPersonalizadas);
+
         ?>
     </main>
     <footer>

@@ -45,11 +45,8 @@ function listarRegistros($tabela, $conexaoid, $opcoes = array()) {
             print("<td>{$registros[$coluna]}</td>");
         }
 
-        $idCampo = $colunas[0]; // Na teoria, o primeiro campo é o ID
-
         foreach ($opcoes as $opcao) {
-            $opcaoLink = strtolower($opcao);
-            print("<td><a href={$opcaoLink}_{$tabela}.php?$idCampo={$registros[$idCampo]}>$opcao</a></td>");
+            print("<td>$opcao</td>");
         }
 
         print("</tr>");
@@ -71,9 +68,6 @@ function listarRegistros($tabela, $conexaoid, $opcoes = array()) {
         $link_proxima = "?pagina=$proxima";
         print(" | <a href='$link_proxima'>Próxima</a>");
     }
-
-    //print(" | <a href='opcoes.html'>Voltar</a>");
-
     #endregion
 }
 
@@ -187,6 +181,8 @@ function criarFormularioCadastro($tabela, $conexaoid, $camposDesejados = array()
                     echo "</div>";
                 }
             }
+          
+
 
             echo "<input type='submit' name='Salvar' value='Salvar' class='btn-submit'>";
 
@@ -229,5 +225,54 @@ function obterProximoCodigoDisponivel($tabela, $conexaoid) {
 }
 
 
+require_once('../lib/tcpdf/tcpdf.php');
+ // Certifique-se de incluir o arquivo TCPDF na pasta correta
 
+ function imprimirTabelaComoPDF($tabela, $conexaoid, $opcoes = array()) {
+    // Exclua as opções "Validar", "Editar" e "Excluir" da lista de opções
+    $opcoesExcluir = array("Validar", "Editar", "Excluir");
+    $opcoesFiltradas = array_diff($opcoes, $opcoesExcluir);
 
+    $query = "SELECT * FROM $tabela";
+    $resultado = mysqli_query($conexaoid, $query);
+
+    // Crie uma nova instância TCPDF
+    $pdf = new TCPDF(PDF_PAGE_ORIENTATION, PDF_UNIT, PDF_PAGE_FORMAT, true, 'UTF-8', false);
+
+    // Defina o título do documento
+    $pdf->SetTitle("Tabela de $tabela");
+
+    // Adicione uma página em branco
+    $pdf->AddPage();
+
+    // Crie a tabela no PDF
+    $html = "<h1>Tabela de " . strtoupper($tabela) . "</h1>";
+    $html .= "<table border='1'>";
+    $html .= "<tr>";
+
+    foreach ($opcoesFiltradas as $opcao) {
+        $html .= "<th>$opcao</th>";
+    }
+
+    $html .= "</tr>";
+
+    while ($registro = mysqli_fetch_assoc($resultado)) {
+        $html .= "<tr>";
+        foreach ($opcoesFiltradas as $opcao) {
+            $valor = $registro[$opcao];
+            $html .= "<td>$valor</td>";
+        }
+        $html .= "</tr>";
+    }
+
+    $html .= "</table>";
+
+    // Saída do HTML para o PDF
+    $pdf->writeHTML($html, true, false, true, false, '');
+
+    // Defina o nome do arquivo de saída (opcional)
+    $nomeArquivo = "tabela_$tabela.pdf";
+
+    // Saída do PDF para o navegador (ou salve em um arquivo)
+    $pdf->Output($nomeArquivo, 'I');
+}
