@@ -2,29 +2,24 @@
 function listarRegistros($tabela, $conexaoid, $opcoes = array()) {
     // Pega a página atual
     $pagina = isset($_GET['pagina']) ? intval($_GET['pagina']) : 1;
-
     $query = "SELECT * FROM $tabela";
     $resultado = mysqli_query($conexaoid, $query) or die("Não foi possível selecionar o banco");
     $total = mysqli_num_rows($resultado); // Total de registros
     $lpp = 10; // Linhas por página
     $paginas = ceil($total / $lpp);
-
     if ($pagina < 1) {
         $pagina = 1;
     } elseif ($pagina > $paginas) {
         $pagina = $paginas;
     }
-
     $inicio = ($pagina - 1) * $lpp;
     $query = "SELECT * FROM $tabela LIMIT $inicio, $lpp";
     $resultado = mysqli_query($conexaoid, $query);
-
     // Imprima a abertura da tabela com a classe "lista-registros"
     print("<h1>LISTA DE " . strtoupper($tabela) . "</h1>");
     print("<BR><font color=red><B>$tabela</b></font><BR>");
     print("<center><br><table class='lista-registros' border=1>");
     print("<tr>");
-
     // Pega os nomes das colunas da tabela e cria cabeçalhos da tabela HTML
     $colunas = [];
     while ($info_coluna = mysqli_fetch_field($resultado)) {
@@ -32,27 +27,23 @@ function listarRegistros($tabela, $conexaoid, $opcoes = array()) {
         $colunas[] = $coluna_nome;
         print("<th>$coluna_nome</th>");
     }
-
     foreach ($opcoes as $opcao) {
         print("<th>$opcao</th>");
     }
-
     print("</tr>");
-
     while ($registros = mysqli_fetch_array($resultado)) {
         print("<tr>");
         foreach ($colunas as $coluna) {
             print("<td>{$registros[$coluna]}</td>");
         }
-
+        $idCampo = $colunas[0]; // Na teoria, o primeiro campo é o ID
         foreach ($opcoes as $opcao) {
-            print("<td>$opcao</td>");
+            $opcaoLink = strtolower($opcao);
+            print("<td><a href={$opcaoLink}_{$tabela}.php?$idCampo={$registros[$idCampo]}>$opcao</a></td>");
         }
-
         print("</tr>");
     }
     print("</table></center>");
-
     #region MOVIMENTAÇÃO
     if ($pagina > 1) {
         $anterior = $pagina - 1;
@@ -68,8 +59,12 @@ function listarRegistros($tabela, $conexaoid, $opcoes = array()) {
         $link_proxima = "?pagina=$proxima";
         print(" | <a href='$link_proxima'>Próxima</a>");
     }
+
+
+
     #endregion
 }
+
 
 
 function criarFormularioCadastro($tabela, $conexaoid, $camposDesejados = array(), $camposNaoDesejados = array(), $readonlyCampos = array()) {
