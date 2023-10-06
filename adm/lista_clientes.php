@@ -19,7 +19,7 @@
         ?>
     </main>
     <footer>
-        <a href="../funcoes/gerar-pdf.php?tabela=Clientes">Gerar PDF</a>
+        <a href="../funcoes/gerar-pdf.php?tabela=Clientes">Gerar PDF</a><br><br>
         <a href="./opcoes.html">Voltar para a página inicial</a>
     </footer>
 </body>
