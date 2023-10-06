@@ -1,16 +1,13 @@
 <?php
-require_once('../lib\dompdf\lib\Cpdf.php'); // Certifique-se de ajustar o caminho correto
+require_once __DIR__ . '/../vendor/autoload.php';
+
 include("../conexao.php");
 
 use Dompdf\Dompdf;
 use Dompdf\Options;
 
 // Função para gerar o PDF
-function imprimirTabelaComoPDF($tabela, $conexao, $opcoes = array()) {
-    // Exclua as opções "Validar", "Editar" e "Excluir" da lista de opções
-    $opcoesExcluir = array("Validar", "Editar", "Excluir");
-    $opcoesFiltradas = array_diff($opcoes, $opcoesExcluir);
-
+function imprimirTabelaComoPDF($tabela, $conexao) {
     $query = "SELECT * FROM $tabela";
     $resultado = mysqli_query($conexao, $query);
 
@@ -22,19 +19,41 @@ function imprimirTabelaComoPDF($tabela, $conexao, $opcoes = array()) {
 
     // Carregue o HTML no DOMPDF
     $html = "<h1>Tabela de " . strtoupper($tabela) . "</h1>";
-    $html .= "<table border='1'>";
-    $html .= "<tr>";
-
-    foreach ($opcoesFiltradas as $opcao) {
-        $html .= "<th>$opcao</th>";
+    $html .= "<style>
+    .lista-registros {
+        width: 100%;
+        border-collapse: collapse;
+        margin-top: 20px;
     }
 
+    .lista-registros th,
+    .lista-registros td {
+        padding: 10px;
+        text-align: left;
+        border-bottom: 1px solid #ddd;
+    }
+
+    .lista-registros th {
+        background-color: rgba(6, 126, 245, 0.849);
+        color: #fff;
+        font-weight: bold;
+    }
+
+</style>";
+    $html .= "<table class='lista-registros' border='1'>";
+
+
+    // Adicione cabeçalhos das colunas
+    $html .= "<tr>";
+    while ($coluna = mysqli_fetch_field($resultado)) {
+        $html .= "<th>{$coluna->name}</th>";
+    }
     $html .= "</tr>";
 
+    // Adicione dados das linhas
     while ($registro = mysqli_fetch_assoc($resultado)) {
         $html .= "<tr>";
-        foreach ($opcoesFiltradas as $opcao) {
-            $valor = $registro[$opcao];
+        foreach ($registro as $valor) {
             $html .= "<td>$valor</td>";
         }
         $html .= "</tr>";
@@ -61,15 +80,13 @@ function imprimirTabelaComoPDF($tabela, $conexao, $opcoes = array()) {
 if (isset($_GET['tabela'])) {
     $tabela = $_GET['tabela'];
 
-    // Substitua 'SEU_HOST', 'SEU_USUARIO', 'SUA_SENHA' e 'SEU_BANCO_DE_DADOS' pelas informações corretas
-    $conexao = mysqli_connect('localhost', 'root', '', 'escola');
+   $conexao = mysqli_connect('localhost', 'root', 'masterkey', 'escola');
 
     if (!$conexao) {
         die('Erro na conexão: ' . mysqli_connect_error());
     }
 
-    $opcoesPersonalizadas = array("Validar", "Editar", "Excluir");
-    imprimirTabelaComoPDF($tabela, $conexao, $opcoesPersonalizadas);
+    imprimirTabelaComoPDF($tabela, $conexao);
 } else {
     // Se o parâmetro "tabela" não estiver definido, redirecione de volta para a página principal
     header("Location: lista-registros.php");

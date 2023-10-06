@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Lista de Clientes</title>
-    <link rel="stylesheet" type="text/css" href="../css_avulsos/lista-registros.css" />
+    <link rel="stylesheet" type="text/css" href="../css_avulsos/lista-registros.css" /> 
 </head>
 <body>
     <header>
@@ -19,7 +19,7 @@
         ?>
     </main>
     <footer>
-        <a href="../funcoes/gerar-pdf.php?tabela=clientes">Gerar PDF</a>
+        <a href="../funcoes/gerar-pdf.php?tabela=Clientes">Gerar PDF</a>
         <a href="./opcoes.html">Voltar para a página inicial</a>
     </footer>
 </body>

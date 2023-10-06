@@ -13,6 +13,9 @@
     listarRegistros("produtos", $conexaoid, $opcoesPersonalizadas);
     ?>
     <br>
-    <a href="./opcoes.html">Voltar para a página inicial</a>
+    <footer>
+        <a href="../funcoes/gerar-pdf.php?tabela=Produtos">Gerar PDF</a>
+        <a href="./opcoes.html">Voltar para a página inicial</a>
+    </footer>
 </body>
 </html>
