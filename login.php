@@ -21,16 +21,16 @@ if ($_POST) {
                     echo ("<script type='text/javascript'>");
                     echo ("window.location.href = 'adm/opcoes.html';"); // Redireciona para a nova página
                     echo ("window.close();"); // Fecha a página de login
-                    echo("</script>");
+                    echo ("</script>");
                 } else {
                     echo ("<script type='text/javascript'>");
                     echo ("window.location.href = 'cliente/produtos/lista_produtos.php?CodCliente={$registro['CodCliente']}';"); // Redireciona para a nova página
                     echo ("window.close();"); // Fecha a página de login
-                    echo("</script>");
+                    echo ("</script>");
                 }
             } else {
                 // Senha incorreta
-                echo "<script>window.alert('Senha incorreta para o login: $LoginUsuario. A senha correta é {$registro['Senha']}')</script>";
+                echo "<script>window.alert('Senha incorreta para o login: $LoginUsuario. A senha correta é ----{$registro['Senha']}---- a Senha a qual você fornceu foi: $SenhaUsuario')</script>";
                 require_once("login.html");
             }
         } else {
