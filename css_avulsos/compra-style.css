@@ -1,3 +1,49 @@
+/* Estilo para a classe "lista-registros" */
+.lista-registros {
+  width: 10%;
+  border-collapse: collapse;
+  margin-top: 20px;
+}
+
+.lista-registros th,
+.lista-registros td {
+  padding: 10px;
+  text-align: left;
+  border-bottom: 1px solid #ddd;
+}
+
+.lista-registros th {
+  background-color: #333;
+  color: #fff;
+  font-weight: bold;
+}
+
+.lista-registros a {
+  text-decoration: none;
+  color: #0a3c6e; /* Cor do link */
+  font-weight: bold;
+}
+
+.lista-registros a:hover {
+  text-decoration: underline;
+  color: #1e4ba3; /* Cor do link ao passar o mouse */
+}
+
+.menu-link {
+  background-color: #f0b10e;
+  color: #fff;
+  margin-right: 10px;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 5px;
+  text-decoration: none;
+  transition: background-color 0.3s ease;
+}
+
+.menu-link:hover {
+  background-color: #e8a008;
+}
+
 /* Estilo para o corpo da página */
 body {
   font-family: Arial, sans-serif;
