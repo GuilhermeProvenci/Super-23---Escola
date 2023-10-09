@@ -16,9 +16,9 @@
         <?php
         include("../../conexao.php");
         include("../../adm/funcoes.php");
-
-        $opcoesPersonalizadas = array("Abrir Compra" => "abrir_compra.php");
+        $opcoesPersonalizadas = array("compra/cliente_compra");
         listarRegistros("produtos", $conexaoid, $opcoesPersonalizadas);
+
         ?>
     </main>
     <footer>
