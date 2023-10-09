@@ -1,6 +1,6 @@
 /* Adicione estilos para a classe "lista-registros" */
 .lista-registros {
-  width: 100%; /* Define a largura da tabela como 100% */
+  width: 10%; /* Define a largura da tabela como 100% */
   border-collapse: collapse;
   margin-top: 20px;
 }
@@ -13,7 +13,7 @@
 }
 
 .lista-registros th {
-  background-color: rgba(6, 126, 245, 0.849);
+  background-color: #333;
   color: #fff;
   font-weight: bold;
 }
