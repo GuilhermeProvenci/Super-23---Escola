@@ -17,7 +17,9 @@
         include("../../conexao.php");
         include("../../adm/funcoes.php");
         $opcoesPersonalizadas = array("compra/cliente_compra");
-        listarRegistros("produtos", $conexaoid, $opcoesPersonalizadas);
+        $camposDesejados = array();
+        $camposNaoDesejados = array("Categoria");
+        listarRegistros("produtos", $conexaoid, $opcoesPersonalizadas, $camposDesejados,$camposNaoDesejados );
 
         ?>
     </main>

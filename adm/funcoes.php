@@ -1,8 +1,38 @@
 <?php
-function listarRegistros($tabela, $conexaoid, $opcoes = array()) {
+function listarRegistros($tabela, $conexaoid, $opcoes = array(), $camposDesejados = array(), $camposNaoDesejados = array()) {
     // Pega a página atual
     $pagina = isset($_GET['pagina']) ? intval($_GET['pagina']) : 1;
-    $query = "SELECT * FROM $tabela";
+
+    // Monta a lista de campos desejados ou utiliza '*' para todos os campos
+    $camposQuery = '*';
+    if (!empty($camposDesejados)) {
+        $camposQuery = implode(", ", $camposDesejados);
+    }
+
+    $query = "SHOW COLUMNS FROM $tabela";
+    $resultadoColunas = mysqli_query($conexaoid, $query);
+    $colunasTabela = array();
+
+    while ($coluna = mysqli_fetch_assoc($resultadoColunas)) {
+        $colunasTabela[] = $coluna['Field'];
+    }
+
+    $colunasSelecionadas = array();
+    foreach ($colunasTabela as $coluna) {
+        if (empty($camposNaoDesejados) || !in_array($coluna, $camposNaoDesejados)) {
+            $colunasSelecionadas[] = $coluna;
+        }
+    }
+
+    // Monta a lista de campos não desejados para filtrar da consulta
+    $camposNaoDesejadosQuery = '';
+    if (!empty($camposNaoDesejados)) {
+        $camposNaoDesejadosQuery = implode(", ", $camposNaoDesejados);
+        $query = "SELECT " . implode(", ", $colunasSelecionadas) . " FROM $tabela";
+    } else {
+        $query = "SELECT " . implode(", ", $colunasSelecionadas) . " FROM $tabela";
+    }
+
     $resultado = mysqli_query($conexaoid, $query) or die("Não foi possível selecionar o banco");
     $total = mysqli_num_rows($resultado); // Total de registros
     $lpp = 10; // Linhas por página
@@ -13,7 +43,13 @@ function listarRegistros($tabela, $conexaoid, $opcoes = array()) {
         $pagina = $paginas;
     }
     $inicio = ($pagina - 1) * $lpp;
-    $query = "SELECT * FROM $tabela LIMIT $inicio, $lpp";
+
+    if (!empty($camposNaoDesejados)) {
+        $query = "SELECT " . implode(", ", $colunasSelecionadas) . " FROM $tabela LIMIT $inicio, $lpp";
+    } else {
+        $query = "SELECT " . implode(", ", $colunasSelecionadas) . " FROM $tabela LIMIT $inicio, $lpp";
+    }
+
     $resultado = mysqli_query($conexaoid, $query);
     // Imprima a abertura da tabela com a classe "lista-registros"
     print("<h1>LISTA DE " . strtoupper($tabela) . "</h1>");
@@ -21,11 +57,11 @@ function listarRegistros($tabela, $conexaoid, $opcoes = array()) {
     print("<center><br><table class='lista-registros' border=1>");
     print("<tr>");
     // Pega os nomes das colunas da tabela e cria cabeçalhos da tabela HTML
-    $colunas = [];
-    while ($info_coluna = mysqli_fetch_field($resultado)) {
-        $coluna_nome = $info_coluna->name;
-        $colunas[] = $coluna_nome;
-        print("<th>$coluna_nome</th>");
+    $colunas = $colunasSelecionadas;
+    foreach ($colunas as $coluna) {
+        if (empty($camposDesejados) || in_array($coluna, $camposDesejados)) {
+            print("<th>$coluna</th>");
+        }
     }
     foreach ($opcoes as $opcao) {
         print("<th>$opcao</th>");
@@ -34,7 +70,9 @@ function listarRegistros($tabela, $conexaoid, $opcoes = array()) {
     while ($registros = mysqli_fetch_array($resultado)) {
         print("<tr>");
         foreach ($colunas as $coluna) {
-            print("<td>{$registros[$coluna]}</td>");
+            if (empty($camposDesejados) || in_array($coluna, $camposDesejados)) {
+                print("<td>{$registros[$coluna]}</td>");
+            }
         }
         $idCampo = $colunas[0]; // Na teoria, o primeiro campo é o ID
         foreach ($opcoes as $opcao) {
@@ -59,11 +97,9 @@ function listarRegistros($tabela, $conexaoid, $opcoes = array()) {
         $link_proxima = "?pagina=$proxima";
         print(" | <a href='$link_proxima'>Próxima</a>");
     }
-
-
-
     #endregion
 }
+
 
 
 

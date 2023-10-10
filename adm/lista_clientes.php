@@ -17,8 +17,19 @@
         include("../conexao.php");
         include("funcoes.php");
         $opcoesPersonalizadas = array("Validar", "Editar", "Excluir");
+        $camposDesejados = array();
+        $camposNaoDesejados = array("Senha");
+        listarRegistros("clientes", $conexaoid, $opcoesPersonalizadas, $camposDesejados, $camposNaoDesejados);
 
-        listarRegistros("clientes", $conexaoid, $opcoesPersonalizadas);
+// Listar todos os campos da tabela
+//    listarRegistros('minha_tabela', $conexaoid);
+// Listar apenas os campos 'campo1' e 'campo2'
+//    listarRegistros('minha_tabela', $conexaoid, array(), array('campo3', 'campo4'));
+// Listar todos os campos, exceto 'campo3' e 'campo4'
+//    listarRegistros('minha_tabela', $conexaoid, array(), array(), array('campo3', 'campo4'));
+
+// o mais intuitivo na minha opiniao ´e definir no array os campos que voce quer, mas pode passar direto aqui, 
+//e os campos tem que estar com o nome igual estpa no banco de daods 
         ?>
     </main>
     <footer>
