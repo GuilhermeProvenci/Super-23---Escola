@@ -103,7 +103,7 @@ function listarRegistros($tabela, $conexaoid, $opcoes = array(), $camposDesejado
 
 
 
-function criarFormularioCadastro($tabela, $conexaoid, $camposDesejados = array(), $camposNaoDesejados = array(), $readonlyCampos = array()) {
+function criarFormularioCadastro($tabela, $conexaoid, $inputTypes = array(), $camposDesejados = array(), $camposNaoDesejados = array(), $readonlyCampos = array()) {
     // Obtenha os nomes das colunas da tabela
     $query = "SHOW COLUMNS FROM $tabela";
     $resultado = mysqli_query($conexaoid, $query);
@@ -132,8 +132,10 @@ function criarFormularioCadastro($tabela, $conexaoid, $camposDesejados = array()
                 // Verifique se o campo deve ser apenas leitura (readonly)
                 $readonly = in_array($nomeColuna, $readonlyCampos) ? "readonly" : "";
 
-                // Se o nome da coluna for a coluna de senha, faça o hashing da senha
-                if ($nomeColuna === 'Senha') {
+                // Determine o tipo de input com base no array $inputTypes
+                $inputType = isset($inputTypes[$nomeColuna]) ? $inputTypes[$nomeColuna] : "text";
+
+                if ($inputType === 'password') {
                     $senha = $_POST[$nomeColuna];
                     $hashSenha = password_hash($senha, PASSWORD_DEFAULT);
                     $colunas[] = $nomeColuna;
@@ -142,6 +144,12 @@ function criarFormularioCadastro($tabela, $conexaoid, $camposDesejados = array()
                     $colunas[] = $nomeColuna;
                     $valores[] = "'" . mysqli_real_escape_string($conexaoid, $_POST[$nomeColuna]) . "'";
                 }
+
+                // Crie o input com base no tipo definido
+                echo "<div class='form-group'>";
+                echo "<label for='$nomeColuna'>$nomeColuna:</label>";
+                echo "<input type='$inputType' name='$nomeColuna' id='$nomeColuna' value='{$_POST[$nomeColuna]}' $readonly required>";
+                echo "</div>";
             }
 
             // Construa a lista de colunas para o comando SQL
@@ -161,7 +169,7 @@ function criarFormularioCadastro($tabela, $conexaoid, $camposDesejados = array()
             if ($resultadoInserir) {
                 // Obtenha o nome do arquivo PHP atual
                 $nomeArquivo = basename($_SERVER['PHP_SELF']);
-                
+
                 // Redirecione para a mesma página com o novo código
                 $proximoCodigo = obterProximoCodigoDisponivel($tabela, $conexaoid);
                 echo "<script>window.location.href='$nomeArquivo?codigo=$proximoCodigo';</script>";
@@ -171,7 +179,7 @@ function criarFormularioCadastro($tabela, $conexaoid, $camposDesejados = array()
             }
 
             echo "</form></div>";
-            
+
         } else {
             // Se o formulário não foi submetido, exiba o formulário
             echo "<div class='form-container'><form method='post' action=''>";
@@ -192,6 +200,9 @@ function criarFormularioCadastro($tabela, $conexaoid, $camposDesejados = array()
                 // Verifique se o campo deve ser apenas leitura (readonly)
                 $readonly = in_array($nomeColuna, $readonlyCampos) ? "readonly" : "";
 
+                // Determine o tipo de input com base no array $inputTypes
+                $inputType = isset($inputTypes[$nomeColuna]) ? $inputTypes[$nomeColuna] : "text";
+
                 // Obtenha o nome da coluna do ID singular com base no nome da tabela plural
                 $nomeColunaId = "Cod" . ucfirst(substr($tabela, 0, -1));
 
@@ -200,7 +211,7 @@ function criarFormularioCadastro($tabela, $conexaoid, $camposDesejados = array()
                     $proximoCodigo = obterProximoCodigoDisponivel($tabela, $conexaoid);
                     echo "<div class='form-group'>";
                     echo "<label for='$nomeColuna'>$nomeColuna:</label>";
-                    echo "<input type='text' name='$nomeColuna' id='$nomeColuna' value='$proximoCodigo' $readonly required>";
+                    echo "<input type='$inputType' name='$nomeColuna' id='$nomeColuna' value='$proximoCodigo' $readonly required>";
                     echo "</div>";
                 } else {
                     // Obtenha o tamanho máximo da coluna a partir do banco de dados
@@ -208,12 +219,10 @@ function criarFormularioCadastro($tabela, $conexaoid, $camposDesejados = array()
 
                     echo "<div class='form-group'>";
                     echo "<label for='$nomeColuna'>$nomeColuna:</label>";
-                    echo "<input type='text' name='$nomeColuna' id='$nomeColuna' $readonly required maxlength='$tamanhoMaximo'>";
+                    echo "<input type='$inputType' name='$nomeColuna' id='$nomeColuna' $readonly required maxlength='$tamanhoMaximo'>";
                     echo "</div>";
                 }
             }
-          
-
 
             echo "<input type='submit' name='Salvar' value='Salvar' class='btn-submit'>";
 

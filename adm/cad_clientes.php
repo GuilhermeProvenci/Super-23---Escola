@@ -15,7 +15,14 @@
     $camposDesejados = array();
     $camposNaoDesejados = array("Validado");
     $camposReadonly = array("CodCliente");
-    criarFormularioCadastro($nomeTabela, $conexaoid, $camposDesejados, $camposNaoDesejados, $camposReadonly);
+    $inputTypes = array(
+        'Nome' => 'text',
+        'Email' => 'email',
+        'Senha' => 'password',
+        'DataNascimento' => 'date',
+    );
+    
+    criarFormularioCadastro("clientes", $conexaoid, $inputTypes, $camposDesejados, $camposNaoDesejados, $camposReadonly);
     ?>
     <br>
     <a href="./opcoes.html">Voltar para a página inicial</a>
