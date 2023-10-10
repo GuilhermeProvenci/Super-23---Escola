@@ -33,14 +33,14 @@ h3 {
 }
 
 .menu-table th {
-  background-color: rgba(17, 26, 153, 0.514);
+  background-color: #333;
   color: #fff;
   font-weight: bold;
 }
 
 .menu-table a {
   text-decoration: none;
-  color: rgba(0, 0, 0, 0.795);
+  color: rgba(234, 243, 241, 0.795);
   font-weight: bold;
 }
 
@@ -51,7 +51,7 @@ h3 {
 
 .menu-link {
   display: inline-block;
-  background-color: #1c0fd4;
+  background-color: #3ad40f;
   color: #fff;
   padding: 5px 10px;
   border-radius: 5px;
@@ -61,7 +61,7 @@ h3 {
 }
 
 .menu-link:hover {
-  background-color: rgba(17, 153, 142, 0.333);
+  background-color: rgba(12, 239, 246, 0.333);
 }
 
 /* Novos estilos para o tema do supermercado */
@@ -94,7 +94,7 @@ body {
 }
 
 .menu-link {
-  background-color: #f0b10e; /* Amarelo */
+  background-color: #42813b; 
   color: #fff;
   margin-right: 10px;
   border: none;
@@ -105,5 +105,5 @@ body {
 }
 
 .menu-link:hover {
-  background-color: #e8a008; /* Amarelo mais escuro no hover */
+  background-color: #4bbe3e; 
 }
