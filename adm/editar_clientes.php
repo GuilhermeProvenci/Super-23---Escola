@@ -1,6 +1,7 @@
 <html>
 <head>
 <title>Edição de cliente</title>
+<link rel="stylesheet" type="text/css" href="../css_avulsos/compra-style.css" />
 </head>
 <body>
 <?php
@@ -44,8 +45,8 @@ $registro = mysqli_fetch_array($resultado);
 
 <tr> <td align="right">&nbsp</td>
 <td width="50%">
-<input name="Salvar" id="salvar" type="submit" value="Salvar">
-<input name="Limpar" id="limpar" type="reset" value="Limpar"></td></tr>
+<button>Salvar <input name="Salvar" id="salvar" type="submit" value="Salvar" style="display : none"></button>
+<button>Limpar <input name="Limpar" id="limpar" type="reset" value="Limpar" style="display : none"></td></tr></button>
  </table>
  </form>
  <HR>
