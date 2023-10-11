@@ -43,18 +43,19 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
         if (mysqli_query($conexaoid, $inserirCompra)) {
             // A compra foi concluída com sucesso
-
             if ($formaPagamento == "paypal") {
-                // Inclua a biblioteca PHP QR Code
-                include_once(__DIR__ . '/../../../vendor/chillerlan/php-qrcode/src/QRCode.php');
+                require_once (__DIR__ . '/../../../vendor/chillerlan/phpqrcode/qrlib.php');
                 
-                // URL do PayPal (substitua pelo URL correto)
-                $urlPaypal = "https://www.paypal.com";
-                
-                // Gere o QR code
-                QRcode::png('PHP QR Code :)');
-            }
+                // Caminho absoluto para o diretório onde a imagem será salva
+                $path = __DIR__ . '/../../../teste';
+                $qrcode = $path.time(). '.png';
             
+                // Gere o QR code
+                QRcode::png('PHP teste', $qrcode);
+            
+                // Exibe a imagem
+                echo '<img src="/Super23/Super-23---Escola/' . substr($qrcode, strpos($qrcode, 'teste')) . '">';
+            }
             
             elseif ($formaPagamento == "boleto") {
                 // Gere o boleto bancário
