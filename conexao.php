@@ -2,7 +2,7 @@
 $host = "localhost";
 $usuario = "root";
 $banco = "escola";
-$senha = "masterkey";
+$senha = "";
 
 // Conectar usando MySQLi
 $conexaoid = new mysqli($host, $usuario, $senha, $banco);

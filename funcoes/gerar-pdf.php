@@ -7,7 +7,8 @@ use Dompdf\Dompdf;
 use Dompdf\Options;
 
 // Função para gerar o PDF
-function imprimirTabelaComoPDF($tabela, $conexao) {
+function imprimirTabelaComoPDF($tabela, $conexao)
+{
     $query = "SELECT * FROM $tabela";
     $resultado = mysqli_query($conexao, $query);
 
@@ -80,7 +81,7 @@ function imprimirTabelaComoPDF($tabela, $conexao) {
 if (isset($_GET['tabela'])) {
     $tabela = $_GET['tabela'];
 
-   $conexao = mysqli_connect('localhost', 'root', 'masterkey', 'escola');
+    $conexao = mysqli_connect('localhost', 'root', '', 'escola');
 
     if (!$conexao) {
         die('Erro na conexão: ' . mysqli_connect_error());
