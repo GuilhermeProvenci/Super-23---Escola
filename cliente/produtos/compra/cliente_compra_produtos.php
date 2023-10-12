@@ -45,32 +45,32 @@
         ?>
         <!-- Formulário para preencher os detalhes da compra -->
         <form id="compraForm" action="processar_compra.php" method="post">
-          <input type="hidden" name="CodProduto" value="<?php echo $CodProduto; ?>">
-          
-          <label for="quantidade">Quantidade:</label>
-          <input type="number" name="quantidade" id="quantidade" required>
-          <br>
+            <input type="hidden" name="CodProduto" value="<?php echo $CodProduto; ?>">
 
-          <label for="nomeCliente">Nome do Cliente:</label>
-          <input type="text" name="nomeCliente" id="nomeCliente" required>
-          <br>
+            <label for="quantidade">Quantidade:</label>
+            <input type="number" name="quantidade" id="quantidade" required>
+            <br>
 
-          <label for="endereco">Endereço de Entrega:</label>
-          <textarea name="endereco" id="endereco" rows="4" cols="50" required></textarea>
-          <br>
+            <label for="nomeCliente">Nome do Cliente:</label>
+            <input type="text" name="nomeCliente" id="nomeCliente" required>
+            <br>
 
-          <label for="formaPagamento">Forma de Pagamento:</label>
-          <select name="formaPagamento" id="formaPagamento" required>
-              <option value="cartao_credito">Cartão de Crédito</option>
-              <option value="boleto">Boleto Bancário</option>
-              <option value="paypal">PayPal</option>
-          </select>
+            <label for="endereco">Endereço de Entrega:</label>
+            <textarea name="endereco" id="endereco" rows="4" cols="50" required></textarea>
+            <br>
 
-    <br>
-    <br>
-    <!-- Adicione mais campos de acordo com os detalhes da compra -->
-    <button type="submit">Finalizar Compra</button>
-</form>
+            <label for="formaPagamento">Forma de Pagamento:</label>
+            <select name="formaPagamento" id="formaPagamento" required>
+                <option value="cartao_credito">Cartão de Crédito</option>
+                <option value="boleto">Boleto Bancário</option>
+                <option value="PIX">Pix</option>
+            </select>
+
+            <br>
+            <br>
+            <!-- Adicione mais campos de acordo com os detalhes da compra -->
+            <button type="submit">Finalizar Compra</button>
+        </form>
 
     </main>
     <footer>
