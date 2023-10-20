@@ -1,0 +1,124 @@
+/* Estilo para o cabeçalho */
+header {
+  background-color: #333;
+  color: #fff;
+  padding: 10px 0;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+}
+
+.header-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+.logo {
+  font-size: 24px;
+  font-weight: bold;
+  text-transform: uppercase;
+  text-decoration: none;
+  color: #fff;
+}
+
+.nav-list {
+  list-style: none;
+  padding: 0;
+  display: flex;
+}
+
+.nav-list li {
+  margin-right: 20px;
+}
+
+
+.nav-list a {
+  text-decoration: none;
+  color: #fff;
+  font-weight: bold;
+}
+
+/* Estilo para o herói (seção principal) */
+.hero {
+  background-image: url('caminho/para/imagem-de-fundo.jpg');
+  background-size: cover;
+  background-position: center;
+  text-align: center;
+  color: #fff;
+  padding: 100px 0;
+}
+
+.hero h1 {
+  font-size: 36px;
+  margin: 0;
+}
+
+.hero p {
+  font-size: 18px;
+  margin-top: 10px;
+}
+
+.btn {
+  background-color: #1e4ba3;
+  color: #fff;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 5px;
+  text-decoration: none;
+  font-weight: bold;
+  transition: background-color 0.3s ease;
+}
+
+.btn:hover {
+  background-color: #00308b;
+}
+
+/* Estilo para a seção de recursos */
+.features {
+  background-color: #f0f0f0;
+  padding: 40px 0;
+  text-align: center;
+}
+
+.features h2 {
+  font-size: 28px;
+  color: #333;
+  margin: 0;
+}
+
+.feature {
+  margin-top: 30px;
+}
+
+.feature-icon {
+  font-size: 48px;
+  color: #1e4ba3;
+}
+
+.feature h3 {
+  font-size: 20px;
+  margin-top: 10px;
+}
+
+.feature p {
+  font-size: 16px;
+  margin-top: 10px;
+}
+
+/* Estilo para o rodapé */
+footer {
+  background-color: #333;
+  color: #fff;
+  padding: 20px 0;
+  text-align: center;
+}
+
+/* Efeito de transição para links */
+a {
+  transition: color 0.3s ease;
+}
+
+a:hover {
+  color: #6283c4;
+}
