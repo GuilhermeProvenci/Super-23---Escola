@@ -1,8 +1,8 @@
 <?php
 // Configurações do Banco de Dados
 define('DB_HOST', 'localhost');
-define('DB_USER', 'seu_usuario');
-define('DB_PASSWORD', 'sua_senha');
+define('DB_USER', 'root');
+define('DB_PASSWORD', '');
 define('DB_DATABASE', 'escola');
 define('DB_CHARSET', 'utf8');
 

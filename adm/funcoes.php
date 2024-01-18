@@ -1,5 +1,6 @@
 <?php
-function listarRegistros($tabela, $conexaoid, $opcoes = array(), $camposDesejados = array(), $camposNaoDesejados = array()) {
+function listarRegistros($tabela, $conexaoid, $opcoes = array(), $camposDesejados = array(), $camposNaoDesejados = array())
+{
     // Pega a página atual
     $pagina = isset($_GET['pagina']) ? intval($_GET['pagina']) : 1;
 
@@ -103,7 +104,8 @@ function listarRegistros($tabela, $conexaoid, $opcoes = array(), $camposDesejado
 
 
 
-function criarFormularioCadastro($tabela, $conexaoid, $inputTypes = array(), $camposDesejados = array(), $camposNaoDesejados = array(), $readonlyCampos = array()) {
+function criarFormularioCadastro($tabela, $conexaoid, $inputTypes = array(), $camposDesejados = array(), $camposNaoDesejados = array(), $readonlyCampos = array())
+{
     // Obtenha os nomes das colunas da tabela
     $query = "SHOW COLUMNS FROM $tabela";
     $resultado = mysqli_query($conexaoid, $query);
@@ -234,7 +236,8 @@ function criarFormularioCadastro($tabela, $conexaoid, $inputTypes = array(), $ca
 }
 
 
-function obterTamanhoMaximoColuna($tabela, $coluna, $conexaoid) {
+function obterTamanhoMaximoColuna($tabela, $coluna, $conexaoid)
+{
     $query = "SELECT CHARACTER_MAXIMUM_LENGTH
               FROM information_schema.COLUMNS
               WHERE TABLE_SCHEMA = DATABASE()
@@ -250,7 +253,8 @@ function obterTamanhoMaximoColuna($tabela, $coluna, $conexaoid) {
 }
 
 
-function obterProximoCodigoDisponivel($tabela, $conexaoid) {
+function obterProximoCodigoDisponivel($tabela, $conexaoid)
+{
     $query = "SELECT AUTO_INCREMENT
               FROM information_schema.TABLES
               WHERE TABLE_SCHEMA = DATABASE()
